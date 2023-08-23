@@ -17,18 +17,22 @@ async def bot_echo(message: types.Message):
                 message_id = message.message_id,
                 reply_markup = await ReplyBtn(
                         user_id = message.from_user.id,
-                        msg_id = message.message_id ))
+                        msg_id = message.message_id,
+                        user_name=message.from_user.username))
+
            
         except:
             pass
+        await message.reply("Tez orada javob beriladi iltimos kuting")
 
 
 @dp.callback_query_handler(text_contains='msg_answer')
 async def msg_answer(call: types.CallbackQuery, state: FSMContext):
     data = call.data.rsplit(':')
-    await state.update_data({'user_id': data[1], 'msg_id' : data[2]})
+    await state.update_data({'user_name':data[3],'user_id': data[1], 'msg_id' : data[2]})
     await call.message.reply(text='Javob xabaringizni yozing:')
     await States.ReplyText.set()
+    
 
 @dp.message_handler(state=States.ReplyText, content_types=types.ContentTypes.ANY)
 async def reply_text(message: types.Message, state: FSMContext):
@@ -38,8 +42,12 @@ async def reply_text(message: types.Message, state: FSMContext):
             chat_id = data.get('user_id'),
             from_chat_id = message.chat.id,
             message_id = message.message_id,
-            reply_to_message_id = data.get('msg_id'))
+            reply_to_message_id = data.get('msg_id'),),
+
+
+        
     except:
         pass
+    
     await state.reset_state()
     
