@@ -11,20 +11,24 @@ from keyboards.inline.buttons import *
 async def bot_echo(message: types.Message):
     for admin in ADMINS:
         try:
-            await bot.copy_message(
-                chat_id = admin,
-                from_chat_id = message.chat.id,
-                message_id = message.message_id,
-                reply_markup = await ReplyBtn(
-                        user_id = message.from_user.id,
-                        msg_id = message.message_id,
-                        user_name=message.from_user.username))
+            # Foydalanuvchi ma'lumotlari
+            user_info = f'{message.from_user.get_mention()}\n\n{message.html_text}'
 
-           
-        except:
-            pass
-        await message.reply("Tez orada javob beriladi iltimos kuting")
+            # Xabarni administratorga yuborish
+            await bot.send_message(
+                chat_id=admin,
+                text=user_info,
+                reply_markup=await ReplyBtn(
+                    user_id=message.from_user.id,
+                    msg_id=message.message_id,
+                    user_name=message.from_user.username
+                )
+            )
 
+        except Exception as e:
+            print(f"Xabar yuborishda xato yuz berdi: {str(e)}")
+
+    await message.reply("Tez orada javob beriladi iltimos kuting")
 
 @dp.callback_query_handler(text_contains='msg_answer')
 async def msg_answer(call: types.CallbackQuery, state: FSMContext):
