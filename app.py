@@ -3,14 +3,14 @@ from loader import dp, db
 import middlewares, filters, handlers
 from utils.notify_admins import on_startup_notify
 from utils.set_bot_commands import set_default_commands
-from handlers.admins.schedules import scheduler
+# from handlers.admins.schedules import scheduler
 import asyncio
 
 
 async def on_startup(dispatcher):
     await set_default_commands(dispatcher)
     await on_startup_notify(dispatcher)
-    asyncio.create_task(scheduler())
+    # asyncio.create_task(scheduler())
     
 
 if __name__ == '__main__':

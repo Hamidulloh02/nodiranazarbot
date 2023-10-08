@@ -12,7 +12,7 @@ async def bot_echo(message: types.Message):
     for admin in ADMINS:
         try:
             # Foydalanuvchi ma'lumotlari
-            user_info = f'{message.from_user.get_mention()}\n\n{message.html_text}'
+            user_info = f'{message.from_user.get_mention()}\{message.from_user.id}\n{message.html_text}'
 
             # Xabarni administratorga yuborish
             await bot.send_message(
